@@ -2,81 +2,98 @@ import tkinter as tk
 import tkinter.ttk as ttk
 import tkinter.messagebox as msgbox
 
-import database
+from database import DB
 
 class ContactCreate(tk.Tk):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-       
+        self.db = DB()
         self.contact_form()
 
+    
+ 
+
     def contact_form(self):
-        geometry = "400x190"
+        geometry = "500x500"
         self.geometry(geometry)
-        id_frame = ttk.Frame(self)
-        name_frame = ttk.Frame(self)
-        phone_frame = ttk.Frame(self)
-        address_frame = ttk.Frame(self)
+        self.resizable(False,False)
+        self.title('Add Contacts')
         
+        label_0 =tk.Label(self, text='Add Contact Form', width=20, font=("bold", 20))
+        label_0.place(x=90, y=43)
 
-        id_label = ttk.Label(self, text="UserID")       
-        name_label = ttk.Label(self, text="Name")
-        phone_label = ttk.Label(self, text="Phone Number")
-        address_label = ttk.Label(self, text="Address")
 
-       
+        label_1 = tk.Label(self, text='Full Name', width=20, font=("bold", 10))
+        label_1.place(x=80, y=130)
 
-       
-        id_label_frame = ttk.LabelFrame(id_frame, labelwidget=id_label)
-        name_label_frame = ttk.LabelFrame(name_frame, labelwidget=name_label)
-        phone_label_frame = ttk.LabelFrame(phone_frame, labelwidget=phone_label)
-        address_label_frame = ttk.LabelFrame(address_frame, labelwidget=address_label)
-       
+        self.name = tk.Entry(self)
+        self.name.place(x=240, y=130)
 
-        self.user_id = ttk.Entry(id_label_frame)
-        self.user_id.grid(row=0,column=0)
+        label_2 = tk.Label(self, text='Phone Number', width=20, font=("bold", 10))
+        label_2.place(x=80, y=180)
 
-        id_label_frame.pack(fill=tk.BOTH, expand=0)
-        id_frame.pack(fill=tk.BOTH)
-       
+        self.phone = tk.Entry(self)
+        self.phone.place(x=240, y=180)
 
-        self.name = ttk.Entry(name_label_frame)
-        self.name.pack(fill=tk.BOTH)
+        label_3 = tk.Label(self, text="Gender", width=20, font=("bold", 10))
+        label_3.place(x=80, y=230)
+
+
+        self.gender = tk.StringVar()
+        ttk.Radiobutton(self, text='Male', variable=self.gender, value='Male').place(x=240,y=230)
+        ttk.Radiobutton(self, text='Female', variable=self.gender, value='Female').place(x=330, y=230)
+
+
+
+        label_4 = tk.Label(self, text='Address', width=20, font=('bold', 10))
+        label_4.place(x=80, y=280)
+
+        self.address = tk.Entry(self)
+        self.address.place(x=240, y= 280)
+
+        label_5 = tk.Label(self, text="Type", width=20, font=("bold", 10))
+        label_5.place(x=80, y=330)
+
+        self.type= tk.StringVar()
+    
+        ttk.Radiobutton(self, text='Mobile', variable=self.type, value='Mobile').place(x=242, y=330)
+        ttk.Radiobutton(self, text='Telephone', variable=self.type, value='Telephone').place(x=320, y=330)
+
+        tk.Button(self, text='Submit', command=self.add_to_db, width=15, bg='brown', fg='white').place(x=180, y=400)
+
+
         
-
-        name_label_frame.pack(fill=tk.BOTH, expand=0)
-        name_frame.pack(fill=tk.BOTH)
-
-        self.phone = ttk.Entry(phone_label_frame)
-        self.phone.pack(fill=tk.BOTH)
-
-        phone_label_frame.pack(fill=tk.BOTH, expand=0)
-        phone_frame.pack(fill=tk.BOTH)     
-
-        self.address =ttk.Entry(address_label_frame)
-        self.address.pack(fill=tk.BOTH)
-
-        address_label_frame.pack(fill=tk.BOTH, expand=0)
-        address_frame.pack(fill=tk.BOTH)     
-
-        submit_button = ttk.Button(self, text="Submit", command=self.add_to_db)
-        submit_button.pack()
-
+       
+        
     
     def add_to_db(self):
-        database.create()
-        user_id = self.user_id.get()
         name = self.name.get()
+        gender = self.gender.get()
         address = self.address.get()
+        Type = self.type.get()
         phone = self.phone.get()
+        print(Type, gender)
         if msgbox.askyesno("Add Contact?", "Shall we proceed?"):
-            try:
+            if name== "" or address == "" or phone == "":
+                msgbox.showerror("error", "All fields are required")
 
-                
-                database.add(int(user_id),name, int(phone), address)
+            
 
-            except sqlite3.IntegrityError:
-                msgbox.showerror("error", "User is already exist!")
+          
+            else:
+
+                try:
+
+                    self.db.insert(str(name), str(gender) ,int(phone), str(Type) ,str(address))
+                    msgbox.showinfo('success', 'Successfully Created')
+                    self.destroy()
+
+                except ValueError:
+                    msgbox.showerror("field", "Fields Error")
+                    msgbox.showinfo("info", f"{user_id} must me integer\n {phone} must be integer")
+
+
+            
 
         else:
             pass

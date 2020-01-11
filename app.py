@@ -2,9 +2,10 @@ import tkinter as tk
 from tkinter import *
 import tkinter.messagebox as msgbox
 import tkinter.ttk as ttk
-import database
 import time
 import sqlite3
+
+
 from contact.contactcreate import ContactCreate
 from contact.contactlist import ContactList
 
@@ -13,14 +14,11 @@ class MainWindow(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("Contact-Book")
-        self.geometry("500x500")
+        self.geometry("700x700")
         self.resizable(False,False)
-        self.label_text = "WELCOME TO THE CONTACT BOOK"
-        self.label = tk.Label(self, text=self.label_text)
-        self.background_image=tk.PhotoImage(file="photos/menu.png")
-        self.background_label = tk.Label(self, image=self.background_image)
-        self.background_label.place(x=0, y=0, relwidth=1, relheight=1)
-        self.label.pack()
+        self.label_0 =tk.Label(self, text='!!!!WELCOME TO THE CONTACT MANAGER!!!!', width=50, font=("bold", 20))
+        self.label_0.place(x=-80, y=43)
+       
         menubar = Menu(self)
         contacts = Menu(menubar, tearoff = 0) 
         menubar.add_cascade(label ='Contacts', menu = contacts) 
