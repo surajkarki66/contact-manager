@@ -1,121 +1,56 @@
+import tkinter as tk
+from tkinter import *
+import tkinter.messagebox as msgbox
+import tkinter.ttk as ttk
 import database
 import time
 import sqlite3
+from contact.contactcreate import ContactCreate
+from contact.contactlist import ContactList
 
 
-
-user_choice = """
-
-Choice 1) Press 'a' to add contact.
-Choice 2) Press 'l' to list contacts.
-Choice 3) Press 'u' to update contact.
-Choice 3) Press 'd' to delete the contact.
-Choice 4) Press 'q' to quit .
-
-
-"""
-
-def menu():
-    database.create()
-    print("<--------------------------WELCOME TO CONTACT BOOK---------------------------->")
-    choice = input(f"{user_choice} Enter the choice:")
-    while choice!= 'q':
-
-        if choice is 'a':
-            add_contact()
-            time.sleep(2)
-        elif choice is 'l':
-            list_contact()
-            time.sleep(2)
-
-        elif choice is 'u':
-            update()
-            time.sleep(2)
-      
-        elif choice is 'd':
-            delete_contact()
-            time.sleep(2)
-        else:
-            print("Undefined choice!")
-        choice = input(f'{user_choice}Enter Choice:')
-def add_contact():
-
-    Id = input("Enter the contact ID:")
-    
-    name = input("Enter the name of movies:")
-
-    phone = input("Enter the phone number:")
-
-    address = input("Enter the contact address:")
-
-    database.add(Id,name,phone,address)
-
-
-def list_contact():
-    count = 0
-    print(count)
-
-
-    contact = database.list_contact()
-    print("")
-
-    print("Here are your contact list")
-    print("")
-
-    for c in contact:
-        count += 1
-    print(f"<-----------Number of Contacts: {count} ------------>")
-
-   
-
-    for c in contact:
+class MainWindow(tk.Tk):
+    def __init__(self):
+        super().__init__()
+        self.title("Contact-Book")
+        self.geometry("500x500")
+        self.resizable(False,False)
+        self.label_text = "WELCOME TO THE CONTACT BOOK"
+        self.label = tk.Label(self, text=self.label_text)
+        self.background_image=tk.PhotoImage(file="photos/menu.png")
+        self.background_label = tk.Label(self, image=self.background_image)
+        self.background_label.place(x=0, y=0, relwidth=1, relheight=1)
+        self.label.pack()
+        menubar = Menu(self)
+        contacts = Menu(menubar, tearoff = 0) 
+        menubar.add_cascade(label ='Contacts', menu = contacts) 
+        contacts.add_command(label ='New Contact', command = self.contact_create )
+        contacts.add_command(label ='Contact List', command = self.contact_list )
         
+        
+    
+        contacts.add_separator() 
+        contacts.add_command(label ='Exit', command = self.destroy) 
+
+        edit = Menu(menubar, tearoff = 0) 
+        menubar.add_cascade(label ='Edit', menu = edit) 
+        edit.add_command(label='Edit Contact', command=None)
+       
+        self.config(menu = menubar) 
+
+        
+    def contact_create(self, event=None):       
+        ContactCreate()
+
+    def contact_list(self):
+        ContactList()
      
-        print(f"ID={c['Id']}")
-        print(f"Phone Number={c['phone']}")
-        print(f"Name = {c['name']}")
-        print(f"Address={c['address']}")
-        print("")
-   
+
+
+        
        
 
-def update():
-    Id = input("Enter the id of person you want to change:")
-    name = input("Enter the new name:")
-    phone = input("Enter the new phone number:")
-    address = input("Enter the new address:")
 
-    database.update_contact(Id,name,phone,address)
-
-   
-
-    
-
-
-
-
-
-
-  
-         
-
-
-def delete_contact():
-    name = input('Enter the name of the movie to delete:')
-    database.delete_movies(name)
-    print("The movies is been deleted.")
-
-
-menu()
-
-
-
-
-
-
-    
-
-            
-
-
-
+if __name__ == "__main__":
+    mainwindow = MainWindow()
+    mainwindow.mainloop()

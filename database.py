@@ -18,10 +18,12 @@ def add(Id,name,phone,address):
 
 
         cursor.execute('INSERT INTO contact VALUES(?,?,?,?)',(Id,name,phone,address))
+        
 
     except sqlite3.IntegrityError:
         print(f'{name} is already exists.')
 
+  
     connections.commit()
     connections.close()
 
