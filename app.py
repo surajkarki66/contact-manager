@@ -7,7 +7,7 @@ import sqlite3
 
 
 from contact.contactcreate import ContactCreate
-from database import DB
+from db.database import DB
 
 
 class MainWindow(tk.Tk):

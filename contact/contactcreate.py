@@ -2,7 +2,7 @@ import tkinter as tk
 import tkinter.ttk as ttk
 import tkinter.messagebox as msgbox
 
-from database import DB
+from db.database import DB
 
 class ContactCreate(tk.Tk):
     def __init__(self, **kwargs):
