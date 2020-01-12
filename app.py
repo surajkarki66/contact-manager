@@ -19,23 +19,21 @@ class MainWindow(tk.Tk):
         self.resizable(False,False)
         self.label_0 =tk.Label(self, text='!!!!WELCOME TO THE CONTACT MANAGER!!!!', width=50, font=("bold", 20))
         self.label_0.place(x=-80, y=43)
+
+        self.label_1 =tk.Label(self, text='Your Conatact List', width=50, font=("bold", 20))
+        self.label_1.place(x=-80, y=103)
        
         menubar = Menu(self)
         contacts = Menu(menubar, tearoff = 0) 
         menubar.add_cascade(label ='Contacts', menu = contacts) 
         contacts.add_command(label ='New Contact', command = self.contact_create )
-        contacts.add_command(label ='Contact List', command = self.contact_list )
-        
-        
+       
     
         contacts.add_separator() 
         contacts.add_command(label ='Exit', command = self.destroy) 
 
-        edit = Menu(menubar, tearoff = 0) 
-        menubar.add_cascade(label ='Edit', menu = edit) 
-        edit.add_command(label='Edit Contact', command=None)
-       
         self.config(menu = menubar) 
+        self.contact_list()
 
         
     def contact_create(self, event=None):       
@@ -47,11 +45,21 @@ class MainWindow(tk.Tk):
 
     def contact_list(self):
         self.contact = self.db.list_contact()
+        self.scrollbar = ttk.Scrollbar(self)
+        self.scrollbar.pack(side=RIGHT, fill=Y)
+        self.listbox = tk.Listbox(self, height=20, width=80)
+        self.listbox.place(x=20, y=153)
+        self.listbox.insert(END, "Id")
         for c in self.contact:
-            print(c['id'])
-            print(c['name'])
-            print(c['phone'])
-            print(c['address'])
+            self.listbox.insert(END, c['id'])
+            self.listbox.insert(2, c['name'])
+        
+        
+       
+        self.listbox.config(yscrollcommand=self.scrollbar.set)
+        self.scrollbar.config(command=self.listbox.yview)
+
+
 
         
 

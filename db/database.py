@@ -15,8 +15,8 @@ class DB:
     def list_contact(self):
         self.cursor.execute('SELECT COUNT(*) FROM contact')
         self.cursor.execute('SELECT * FROM contact ORDER BY NAME')
-        contact = [{'id': row[0], 'name': row[1], 'gender':row[2], 'phone':row[3], 'Type': row[4], 'email':row[5], 'address':row[6]} for row in self.cursor.fetchall()]
-        return contact
+        rows = self.cursor.fetchall()
+        return rows
 
 
 
