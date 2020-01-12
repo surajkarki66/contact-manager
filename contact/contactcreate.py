@@ -35,36 +35,45 @@ class ContactCreate(tk.Tk):
         self.phone = tk.Entry(self)
         self.phone.place(x=240, y=180)
 
-        label_3 = tk.Label(self, text="Gender", width=20, font=("bold", 10))
+        label_3 = tk.Label(self, text='Email', width=20, font=("bold", 10))
         label_3.place(x=80, y=230)
 
 
-        self.gender = tk.StringVar()
-        
-        
-       
-        tk.Radiobutton(self, text='Male', variable=self.gender.set("Male"), value='Male', bg='lightblue',fg='blue').place(x=240,y=230)
-        tk.Radiobutton(self, text='Female', variable=self.gender.set("Female"), value='Female', bg='lightblue',fg='blue').place(x=330, y=230)
+        self.email = tk.Entry(self)
+        self.email.place(x=240, y=230)
 
 
-
-        label_4 = tk.Label(self, text='Address', width=20, font=('bold', 10))
+        label_4 = tk.Label(self, text="Gender", width=20, font=("bold", 10))
         label_4.place(x=80, y=280)
 
-        self.address = tk.Entry(self)
-        self.address.place(x=240, y= 280)
 
-        label_5 = tk.Label(self, text="Type", width=20, font=("bold", 10))
+        self.gender = tk.StringVar(self, "")
+       
+        
+       
+        tk.Radiobutton(self, text='Male', variable=self.gender, value='Male', bg='lightblue',fg='blue').place(x=240,y=280)
+        tk.Radiobutton(self, text='Female', variable=self.gender, value='Female', bg='lightblue',fg='blue').place(x=330, y=280)
+        
+
+
+        label_5 = tk.Label(self, text='Address', width=20, font=('bold', 10))
         label_5.place(x=80, y=330)
 
-        self.type= tk.StringVar()
-       
-       
-    
-        ttk.Radiobutton(self, text='Mobile', variable=self.type.set("Mobile"), value='Mobile').place(x=242, y=330)
-        ttk.Radiobutton(self, text='Telephone', variable=self.type.set("Telephone"), value='Telephone').place(x=320, y=330)
+        self.address = tk.Entry(self)
+        self.address.place(x=240, y= 330)
 
-        tk.Button(self, text='Submit', command=self.add_to_db, width=15, bg='brown', fg='white').place(x=180, y=400)
+        label_6 = tk.Label(self, text="Type", width=20, font=("bold", 10))
+        label_6.place(x=80, y=380)
+
+        list1 = ['Telephone', 'Mobile']
+        self.type = tk.StringVar(self)
+        droplist = tk.OptionMenu(self, self.type, *list1)
+        droplist.config(width=15)
+        self.type.set('Select number type')
+        droplist.place(x=240, y=380)
+
+       
+        tk.Button(self, text='Submit', command=self.add_to_db, width=15, bg='brown', fg='white').place(x=180, y=450)
 
 
         
@@ -74,11 +83,12 @@ class ContactCreate(tk.Tk):
     def add_to_db(self):
         name = self.name.get()
         gender = self.gender.get()
+        email = self.email.get()
         address = self.address.get()
         Type = self.type.get()
         phone = self.phone.get()
         if msgbox.askyesno("Add Contact?", "Shall we proceed?"):
-            if name== "" or address == "" or phone == "":
+            if name== "" or address == "" or phone == "" or gender == "":
                 msgbox.showerror("error", "All fields are required")
 
             
@@ -88,7 +98,7 @@ class ContactCreate(tk.Tk):
 
                 try:
 
-                    self.db.insert(str(name), str(gender),int(phone), str(Type) ,str(address))
+                    self.db.insert(str(name), str(gender), str(email),int(phone), str(Type) ,str(address))
                     msgbox.showinfo('success', 'Successfully Created')
                     print(name, gender, phone, Type, address)
                     self.destroy()
