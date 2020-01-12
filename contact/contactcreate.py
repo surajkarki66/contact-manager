@@ -40,8 +40,11 @@ class ContactCreate(tk.Tk):
 
 
         self.gender = tk.StringVar()
-        ttk.Radiobutton(self, text='Male', variable=self.gender, value='Male').place(x=240,y=230)
-        ttk.Radiobutton(self, text='Female', variable=self.gender, value='Female').place(x=330, y=230)
+        
+        
+       
+        tk.Radiobutton(self, text='Male', variable=self.gender.set("Male"), value='Male', bg='lightblue',fg='blue').place(x=240,y=230)
+        tk.Radiobutton(self, text='Female', variable=self.gender.set("Female"), value='Female', bg='lightblue',fg='blue').place(x=330, y=230)
 
 
 
@@ -55,9 +58,11 @@ class ContactCreate(tk.Tk):
         label_5.place(x=80, y=330)
 
         self.type= tk.StringVar()
+       
+       
     
-        ttk.Radiobutton(self, text='Mobile', variable=self.type, value='Mobile').place(x=242, y=330)
-        ttk.Radiobutton(self, text='Telephone', variable=self.type, value='Telephone').place(x=320, y=330)
+        ttk.Radiobutton(self, text='Mobile', variable=self.type.set("Mobile"), value='Mobile').place(x=242, y=330)
+        ttk.Radiobutton(self, text='Telephone', variable=self.type.set("Telephone"), value='Telephone').place(x=320, y=330)
 
         tk.Button(self, text='Submit', command=self.add_to_db, width=15, bg='brown', fg='white').place(x=180, y=400)
 
@@ -72,7 +77,6 @@ class ContactCreate(tk.Tk):
         address = self.address.get()
         Type = self.type.get()
         phone = self.phone.get()
-        print(Type, gender)
         if msgbox.askyesno("Add Contact?", "Shall we proceed?"):
             if name== "" or address == "" or phone == "":
                 msgbox.showerror("error", "All fields are required")
@@ -84,8 +88,9 @@ class ContactCreate(tk.Tk):
 
                 try:
 
-                    self.db.insert(str(name), str(gender) ,int(phone), str(Type) ,str(address))
+                    self.db.insert(str(name), str(gender),int(phone), str(Type) ,str(address))
                     msgbox.showinfo('success', 'Successfully Created')
+                    print(name, gender, phone, Type, address)
                     self.destroy()
 
                 except ValueError:

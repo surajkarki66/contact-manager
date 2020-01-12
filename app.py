@@ -7,12 +7,13 @@ import sqlite3
 
 
 from contact.contactcreate import ContactCreate
-from contact.contactlist import ContactList
+from database import DB
 
 
 class MainWindow(tk.Tk):
     def __init__(self):
         super().__init__()
+        self.db=DB()
         self.title("Contact-Book")
         self.geometry("700x700")
         self.resizable(False,False)
@@ -40,13 +41,22 @@ class MainWindow(tk.Tk):
     def contact_create(self, event=None):       
         ContactCreate()
 
-    def contact_list(self):
-        ContactList()
-     
 
+    
+
+
+    def contact_list(self):
+        self.contact = self.db.list_contact()
+        for c in self.contact:
+            print(c['id'])
+            print(c['name'])
+            print(c['phone'])
+            print(c['address'])
 
         
-       
+
+
+            
 
 
 if __name__ == "__main__":
