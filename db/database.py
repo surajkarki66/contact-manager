@@ -15,6 +15,7 @@ class DB:
     def list_contact(self):
         self.cursor.execute('SELECT COUNT(*) FROM contact')
         self.cursor.execute('SELECT * FROM contact')
+        self.connections.commit()
         contact = [{'id': row[0], 'name': row[1], 'gender':row[2], 'email':row[3], 'phone': row[4], 'Type':row[5], 'address':row[6]} for row in self.cursor.fetchall()]
         return contact
 
@@ -42,7 +43,7 @@ class DB:
         try:
 
             self.connections.execute('update contact set name=?, gender=?,phone=?, Type=?, email=?,address=? where id=?',(name, gender, phone, Type, email, address, id))
-
+            self.connections.commit()
         except sqlite3.IntegrityError:
             print("The data is already")
         
@@ -54,8 +55,10 @@ class DB:
         self.cursor.execute('DELETE FROM contact WHERE id=?', (id,))
         self.connections.commit()
       
-    def search(self):
-        pass
+    def search(self, name):
+        self.cursor.execute('SELECT * FROM contact WHERE name LIKE ?', ('%'+name+'%',))
+        contact = [{'id': row[0], 'name': row[1], 'gender':row[2], 'email':row[3], 'phone': row[4], 'Type':row[5], 'address':row[6]} for row in self.cursor.fetchall()]
+        return contact
 
 
 

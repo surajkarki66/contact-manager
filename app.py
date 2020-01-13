@@ -15,7 +15,7 @@ class MainWindow(tk.Tk):
         super().__init__()
         self.db=DB()
         self.title("Contact-Book")
-        self.geometry("950x500")
+        self.geometry("950x600")
         self.resizable(False,False)
         self.label_0 =tk.Label(self, text='!!!!WELCOME TO THE CONTACT MANAGER!!!!', width=50, font=("bold", 20))
         self.label_0.place(x=40, y=43)
@@ -46,15 +46,25 @@ class MainWindow(tk.Tk):
         self.scrollbar.config(command=self.listbox.yview)
         self.scrollbar.config(command=self.listbox.xview)
 
-        tk.Button(self, text='Create Contact', command=self.contact_create, width=15, bg='green', fg='white',font=("bold", 10)).place(x=50, y=450)
-        tk.Button(self, text='Show Contact List', command=self.contact_list, width=15, bg='blue', fg='white', font=("bold", 10)).place(x=270, y=450)
-        tk.Button(self, text='Update Contact ', command=self.contact_update, width=15, bg='orange', fg='white', font=("bold", 10)).place(x=490, y=450)
-        tk.Button(self, text='Delete Contact', command=self.contact_delete, width=15, bg='red', fg='white', font=("bold", 10)).place(x=710, y=450)
+        self.search_label =tk.Label(self, text='Search By Name', width=20, font=("bold", 10))
+        self.search_label.place(x=36, y=420)
+
+        self.search_entry = ttk.Entry(self)
+        self.search_entry.place(x=200, y=420)
+       
+
+
+
+        tk.Button(self, text='Create Contact', command=self.contact_create, width=15, bg='green', fg='white',font=("bold", 10)).place(x=50, y=500)
+        tk.Button(self, text='Show Contact List', command=self.contact_list, width=15, bg='blue', fg='white', font=("bold", 10)).place(x=270, y=500)
+        tk.Button(self, text='Update Contact ', command=self.contact_update, width=15, bg='orange', fg='white', font=("bold", 10)).place(x=490, y=500)
+        tk.Button(self, text='Delete Contact', command=self.contact_delete, width=15, bg='red', fg='white', font=("bold", 10)).place(x=710, y=500)
+        tk.Button(self, text='Search', command=self.search_contact, width=10, bg='yellow', fg='white', font=("bold", 10)).place(x=400, y=415)
        
 
         
     def contact_create(self):       
-       self.create = Contact()
+       self.create = Contact(self)
        self.create.contact_create_form()
 
     def contact_list(self):
@@ -103,9 +113,36 @@ class MainWindow(tk.Tk):
           
        except IndexError:
             msgbox.showerror("error", "First Select the Item")
+
+
+
+    def on_closing(self):
+        if msgbox.askokcancel("Quit", "Do you want to quit?"):
+            del self.db
+            self.destroy()
             
            
        
+
+    def search_contact(self):
+        self.contact_name = self.search_entry.get()
+        self.result=self.db.search(self.contact_name)
+        print(self.result)
+        for i in self.listbox.get_children():
+            self.listbox.delete(i)
+
+        if self.result == []:
+            msgbox.showinfo('Not Found',"Search result not found")
+
+        
+
+        else:
+            for c in self.result:
+                self.listbox.insert("","end", values=(c['id'],c['name'],c['gender'],
+                                        c['email'],c['phone'],c['Type'],c['address']))
+
+       
+        
 
         
 
@@ -116,4 +153,5 @@ class MainWindow(tk.Tk):
 
 if __name__ == "__main__":
     mainwindow = MainWindow()
+    mainwindow.protocol("WM_DELETE_WINDOW", mainwindow.on_closing) 
     mainwindow.mainloop()

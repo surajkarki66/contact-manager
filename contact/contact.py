@@ -4,11 +4,11 @@ import tkinter.messagebox as msgbox
 
 from db.database import DB
 
-class Contact(tk.Tk):
-    def __init__(self):
+class Contact(tk.Toplevel):
+    def __init__(self, master):
         super().__init__()
         self.db = DB()
-       
+        self.master = master
     
     def contact_create_form(self):
         
