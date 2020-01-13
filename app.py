@@ -15,7 +15,7 @@ class MainWindow(tk.Tk):
         super().__init__()
         self.db=DB()
         self.title("Contact-Book")
-        self.geometry("950x650")
+        self.geometry("950x500")
         self.resizable(False,False)
         self.label_0 =tk.Label(self, text='!!!!WELCOME TO THE CONTACT MANAGER!!!!', width=50, font=("bold", 20))
         self.label_0.place(x=40, y=43)
@@ -23,33 +23,15 @@ class MainWindow(tk.Tk):
         self.label_1 =tk.Label(self, text='Your Contact List', width=50, font=("bold", 20))
         self.label_1.place(x=36, y=103)
        
-        menubar = Menu(self)
-        contacts = Menu(menubar, tearoff = 0) 
-        menubar.add_cascade(label ='Contacts', menu = contacts) 
-        contacts.add_command(label ='New Contact', command = self.contact_create )
-       
-    
-        contacts.add_separator() 
-        contacts.add_command(label ='Exit', command = self.destroy) 
-
-        self.config(menu = menubar) 
-        self.contact_list()
-
-        
-    def contact_create(self, event=None):       
-        ContactCreate()
-
-
-    
-
-
-    def contact_list(self):
-        self.contact = self.db.list_contact()
         self.scrollbar = ttk.Scrollbar(self)
         self.scrollbar.pack(side=RIGHT, fill=Y)
         self.cols = ('ID','Name', 'Gender', 'Email', 'Phone', 'Type', 'Address')
         self.listbox = ttk.Treeview(self, columns=self.cols, show="headings")
-        self.listbox.place(x=20, y=153)
+
+        for col in self.cols:
+            self.listbox.heading(col, text=col)
+
+        self.listbox.place(x=10, y=163)
         self.listbox.column(self.cols[0], width=35)
         self.listbox.column(self.cols[1], width=150)
         self.listbox.column(self.cols[2], width=60)
@@ -57,33 +39,42 @@ class MainWindow(tk.Tk):
         self.listbox.column(self.cols[4], width=150)
         self.listbox.column(self.cols[5], width=70)
         self.listbox.column(self.cols[6], width=220)
-        
-        
-        
-        for col in self.cols:
-            self.listbox.heading(col, text=col)
 
-        for c in self.contact:
-            self.listbox.insert("","end", values=(c['id'],c['name'],c['gender'],c['email'],c['phone'],c['Type'],c['address']))
-
-
-        
-        
         
        
         self.listbox.config(yscrollcommand=self.scrollbar.set)
         self.scrollbar.config(command=self.listbox.yview)
         self.scrollbar.config(command=self.listbox.xview)
 
+        tk.Button(self, text='Create Contact', command=self.contact_create, width=15, bg='green', fg='white',font=("bold", 10)).place(x=50, y=450)
+        tk.Button(self, text='Show Contact List', command=self.contact_list, width=15, bg='blue', fg='white', font=("bold", 10)).place(x=270, y=450)
+        tk.Button(self, text='Show Contact List', command=None, width=15, bg='red', fg='white', font=("bold", 10)).place(x=490, y=450)
+        tk.Button(self, text='Show Contact List', command=None, width=15, bg='red', fg='white', font=("bold", 10)).place(x=710, y=450)
+       
 
+        
+    def contact_create(self):       
+        ContactCreate()
 
+    def contact_list(self):
+        self.contact = self.db.list_contact()
+        for i in self.listbox.get_children():
+            self.listbox.delete(i)
+       
+        for c in self.contact:
+            self.listbox.insert("","end", values=(c['id'],c['name'],c['gender'],
+                                    c['email'],c['phone'],c['Type'],c['address']))
 
 
         
+    def contact_delete(self):
+        
+        
 
 
-            
 
+
+    
 
 if __name__ == "__main__":
     mainwindow = MainWindow()

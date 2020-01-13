@@ -18,7 +18,6 @@ class ContactCreate(tk.Tk):
         self.geometry(geometry)
         self.resizable(False,False)
         self.title('Add Contacts')
-        
         label_0 =tk.Label(self, text='Add Contact Form', width=20, font=("bold", 20))
         label_0.place(x=90, y=43)
 
