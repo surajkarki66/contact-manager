@@ -15,13 +15,13 @@ class MainWindow(tk.Tk):
         super().__init__()
         self.db=DB()
         self.title("Contact-Book")
-        self.geometry("700x700")
+        self.geometry("950x650")
         self.resizable(False,False)
         self.label_0 =tk.Label(self, text='!!!!WELCOME TO THE CONTACT MANAGER!!!!', width=50, font=("bold", 20))
-        self.label_0.place(x=-80, y=43)
+        self.label_0.place(x=40, y=43)
 
-        self.label_1 =tk.Label(self, text='Your Conatact List', width=50, font=("bold", 20))
-        self.label_1.place(x=-80, y=103)
+        self.label_1 =tk.Label(self, text='Your Contact List', width=50, font=("bold", 20))
+        self.label_1.place(x=36, y=103)
        
         menubar = Menu(self)
         contacts = Menu(menubar, tearoff = 0) 
@@ -47,17 +47,35 @@ class MainWindow(tk.Tk):
         self.contact = self.db.list_contact()
         self.scrollbar = ttk.Scrollbar(self)
         self.scrollbar.pack(side=RIGHT, fill=Y)
-        self.listbox = tk.Listbox(self, height=20, width=80)
+        self.cols = ('ID','Name', 'Gender', 'Email', 'Phone', 'Type', 'Address')
+        self.listbox = ttk.Treeview(self, columns=self.cols, show="headings")
         self.listbox.place(x=20, y=153)
-        self.listbox.insert(END, "Id")
+        self.listbox.column(self.cols[0], width=35)
+        self.listbox.column(self.cols[1], width=150)
+        self.listbox.column(self.cols[2], width=60)
+        self.listbox.column(self.cols[3], width=220)
+        self.listbox.column(self.cols[4], width=150)
+        self.listbox.column(self.cols[5], width=70)
+        self.listbox.column(self.cols[6], width=220)
+        
+        
+        
+        for col in self.cols:
+            self.listbox.heading(col, text=col)
+
         for c in self.contact:
-            self.listbox.insert(END, c['id'])
-            self.listbox.insert(2, c['name'])
+            self.listbox.insert("","end", values=(c['id'],c['name'],c['gender'],c['email'],c['phone'],c['Type'],c['address']))
+
+
+        
         
         
        
         self.listbox.config(yscrollcommand=self.scrollbar.set)
         self.scrollbar.config(command=self.listbox.yview)
+        self.scrollbar.config(command=self.listbox.xview)
+
+
 
 
 
