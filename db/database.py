@@ -58,28 +58,36 @@ class DB:
       
     def search(self, name):
         self.cursor.execute('SELECT * FROM contact WHERE name LIKE ?', ('%'+name+'%',))
-        contact = [{'id': row[0], 'name': row[1], 'gender':row[2], 'email':row[3], 'phone': row[4], 'Type':row[5], 'address':row[6]} for row in self.cursor.fetchall()]
+        contact = [{'id': row[0], 'name': row[1], 'gender':row[2], 'email':row[3], 'phone': row[4], 'Type':row[5], 'address':row[6], 'date':row[7]} for row in self.cursor.fetchall()]
         return contact
 
 
     def sort_by_name(self):
         self.cursor.execute('SELECT * FROM contact ORDER BY name')
         self.connections.commit()
-        contact = [{'id': row[0], 'name': row[1], 'gender':row[2], 'email':row[3], 'phone': row[4], 'Type':row[5], 'address':row[6]} for row in self.cursor.fetchall()]
+        contact = [{'id': row[0], 'name': row[1], 'gender':row[2], 'email':row[3], 'phone': row[4], 'Type':row[5], 'address':row[6], 'date':row[7]} for row in self.cursor.fetchall()]
         return contact
 
 
     def sort_by_address(self):
         self.cursor.execute('SELECT * FROM contact ORDER BY address')
         self.connections.commit()
-        contact = [{'id': row[0], 'name': row[1], 'gender':row[2], 'email':row[3], 'phone': row[4], 'Type':row[5], 'address':row[6]} for row in self.cursor.fetchall()]
+        contact = [{'id': row[0], 'name': row[1], 'gender':row[2], 'email':row[3], 'phone': row[4], 'Type':row[5], 'address':row[6], 'date':row[7]} for row in self.cursor.fetchall()]
         return contact
 
     def sort_by_id(self):
         self.cursor.execute('SELECT * FROM contact ORDER BY id')
         self.connections.commit()
-        contact = [{'id': row[0], 'name': row[1], 'gender':row[2], 'email':row[3], 'phone': row[4], 'Type':row[5], 'address':row[6]} for row in self.cursor.fetchall()]
+        contact = [{'id': row[0], 'name': row[1], 'gender':row[2], 'email':row[3], 'phone': row[4], 'Type':row[5], 'address':row[6], 'date':row[7]} for row in self.cursor.fetchall()]
         return contact
+
+
+    def sort_by_date(self):
+        self.cursor.execute('SELECT * FROM contact ORDER BY date')
+        self.connections.commit()
+        contact = [{'id': row[0], 'name': row[1], 'gender':row[2], 'email':row[3], 'phone': row[4], 'Type':row[5], 'address':row[6], 'date':row[7]} for row in self.cursor.fetchall()]
+        return contact
+
 
 
 

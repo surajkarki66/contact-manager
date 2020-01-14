@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import *
 import tkinter.messagebox as msgbox
 import tkinter.ttk as ttk
+import time
 import sqlite3
 
 
@@ -14,17 +15,17 @@ class MainWindow(tk.Tk):
         super().__init__()
         self.db=DB()
         self.title("Contact-Book")
-        self.geometry("950x600")
+        self.geometry("1100x600")
         self.resizable(False,False)
         self.label_0 =tk.Label(self, text='!!!!WELCOME TO THE CONTACT MANAGER!!!!', width=50, font=("bold", 20))
-        self.label_0.place(x=40, y=43)
+        self.label_0.place(x=100, y=43)
 
         self.label_1 =tk.Label(self, text='Your Contact List', width=50, font=("bold", 20))
-        self.label_1.place(x=36, y=103)
+        self.label_1.place(x=100, y=103)
        
         self.scrollbar = ttk.Scrollbar(self)
         self.scrollbar.pack(side=RIGHT, fill=Y)
-        self.cols = ('ID','Name', 'Gender', 'Email', 'Phone', 'Type', 'Address')
+        self.cols = ('ID','Name', 'Gender', 'Email', 'Phone', 'Type', 'Address', 'Date Time')
         self.listbox = ttk.Treeview(self, columns=self.cols, show="headings")
 
         for col in self.cols:
@@ -38,6 +39,7 @@ class MainWindow(tk.Tk):
         self.listbox.column(self.cols[4], width=150)
         self.listbox.column(self.cols[5], width=70)
         self.listbox.column(self.cols[6], width=220)
+        self.listbox.column(self.cols[7], width=160)
 
         
        
@@ -53,12 +55,12 @@ class MainWindow(tk.Tk):
 
        
 
-        sort_list = ['A', 'Name', 'Id', 'Address']
+        sort_list = ['A', 'Name', 'Id', 'Address', 'Date']
         self.sort_type = tk.StringVar()
         droplist = ttk.OptionMenu(self, self.sort_type, *sort_list)
         droplist.config(width=7)
         self.sort_type.set('Sort By')
-        droplist.place(x=810, y=383)
+        droplist.place(x=970, y=383)
        
 
 
@@ -84,6 +86,9 @@ class MainWindow(tk.Tk):
         elif sort_type == 'Id':
             self.sort_by_id()
 
+        elif sort_type == 'Date':
+            self.sort_by_date()
+
         else:
             self.contact = self.db.list_contact()
             for i in self.listbox.get_children():
@@ -91,7 +96,7 @@ class MainWindow(tk.Tk):
         
             for c in self.contact:
                 self.listbox.insert("","end", values=(c['id'],c['name'],c['gender'],
-                                        c['email'],c['phone'],c['Type'],c['address']))
+                                        c['email'],c['phone'],c['Type'],c['address'], c['date']))
 
 
     def contact_update(self):
@@ -100,7 +105,7 @@ class MainWindow(tk.Tk):
           
            self.selected_item = self.listbox.selection()[0]
            values = tuple(self.listbox.item(self.selected_item)['values'])
-           self.update = Contact()
+           self.update = Contact(self)
            self.update.contact_update_form(values[0])
           
 
@@ -156,7 +161,7 @@ class MainWindow(tk.Tk):
         else:
             for c in self.result:
                 self.listbox.insert("","end", values=(c['id'],c['name'],c['gender'],
-                                        c['email'],c['phone'],c['Type'],c['address']))
+                                        c['email'],c['phone'],c['Type'],c['address'],c['date']))
 
     
     def sort_by_name(self):
@@ -165,7 +170,7 @@ class MainWindow(tk.Tk):
             self.listbox.delete(i)
         for c in self.sort_name:
                 self.listbox.insert("","end", values=(c['id'],c['name'],c['gender'],
-                                        c['email'],c['phone'],c['Type'],c['address']))
+                                        c['email'],c['phone'],c['Type'],c['address'], c['date']))
 
     def sort_by_address(self):
         self.sort_address = self.db.sort_by_address()
@@ -173,7 +178,7 @@ class MainWindow(tk.Tk):
             self.listbox.delete(i)
         for c in self.sort_address:
                 self.listbox.insert("","end", values=(c['id'],c['name'],c['gender'],
-                                        c['email'],c['phone'],c['Type'],c['address']))
+                                        c['email'],c['phone'],c['Type'],c['address'], c['date']))
 
 
     def sort_by_id(self):
@@ -182,7 +187,18 @@ class MainWindow(tk.Tk):
             self.listbox.delete(i)
         for c in self.sort_id:
                 self.listbox.insert("","end", values=(c['id'],c['name'],c['gender'],
-                                        c['email'],c['phone'],c['Type'],c['address']))
+                                        c['email'],c['phone'],c['Type'],c['address'],c['date']))
+
+
+
+    def sort_by_date(self):
+        self.sort_date = self.db.sort_by_date()
+        for i in self.listbox.get_children():
+            self.listbox.delete(i)
+        for c in self.sort_date:
+                self.listbox.insert("","end", values=(c['id'],c['name'],c['gender'],
+                                        c['email'],c['phone'],c['Type'],c['address'],c['date']))
+
 
 
         
