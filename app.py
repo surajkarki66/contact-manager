@@ -51,8 +51,16 @@ class MainWindow(tk.Tk):
 
         self.search_entry = ttk.Entry(self)
         self.search_entry.place(x=200, y=420)
+
        
 
+        sort_list = ['Address', 'Name']
+        self.sort_type = tk.StringVar()
+        droplist = ttk.OptionMenu(self, self.sort_type, *sort_list)
+        droplist.config(width=7)
+        self.sort_type.set('Sort By')
+        droplist.place(x=810, y=383)
+       
 
 
         tk.Button(self, text='Create Contact', command=self.contact_create, width=15, bg='green', fg='white',font=("bold", 10)).place(x=50, y=500)
@@ -60,7 +68,6 @@ class MainWindow(tk.Tk):
         tk.Button(self, text='Update Contact ', command=self.contact_update, width=15, bg='orange', fg='white', font=("bold", 10)).place(x=490, y=500)
         tk.Button(self, text='Delete Contact', command=self.contact_delete, width=15, bg='red', fg='white', font=("bold", 10)).place(x=710, y=500)
         tk.Button(self, text='Search', command=self.search_contact, width=10, bg='yellow', fg='white', font=("bold", 10)).place(x=400, y=415)
-       
 
         
     def contact_create(self):       
@@ -68,13 +75,19 @@ class MainWindow(tk.Tk):
        self.create.contact_create_form()
 
     def contact_list(self):
-        self.contact = self.db.list_contact()
-        for i in self.listbox.get_children():
-            self.listbox.delete(i)
-       
-        for c in self.contact:
-            self.listbox.insert("","end", values=(c['id'],c['name'],c['gender'],
-                                    c['email'],c['phone'],c['Type'],c['address']))
+        sort_type = self.sort_type.get()
+        if sort_type == 'Name':
+            self.sort_by_name()
+        elif sort_type == 'address':
+            pass
+        else:
+            self.contact = self.db.list_contact()
+            for i in self.listbox.get_children():
+                self.listbox.delete(i)
+        
+            for c in self.contact:
+                self.listbox.insert("","end", values=(c['id'],c['name'],c['gender'],
+                                        c['email'],c['phone'],c['Type'],c['address']))
 
 
     def contact_update(self):
@@ -138,6 +151,15 @@ class MainWindow(tk.Tk):
 
         else:
             for c in self.result:
+                self.listbox.insert("","end", values=(c['id'],c['name'],c['gender'],
+                                        c['email'],c['phone'],c['Type'],c['address']))
+
+    
+    def sort_by_name(self):
+        self.sort_name = self.db.sort_by_name()
+        for i in self.listbox.get_children():
+            self.listbox.delete(i)
+        for c in self.sort_name:
                 self.listbox.insert("","end", values=(c['id'],c['name'],c['gender'],
                                         c['email'],c['phone'],c['Type'],c['address']))
 
