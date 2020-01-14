@@ -54,7 +54,7 @@ class MainWindow(tk.Tk):
 
        
 
-        sort_list = ['Address', 'Name']
+        sort_list = ['A', 'Name', 'Id', 'Address']
         self.sort_type = tk.StringVar()
         droplist = ttk.OptionMenu(self, self.sort_type, *sort_list)
         droplist.config(width=7)
@@ -78,8 +78,13 @@ class MainWindow(tk.Tk):
         sort_type = self.sort_type.get()
         if sort_type == 'Name':
             self.sort_by_name()
-        elif sort_type == 'address':
-            pass
+
+        elif sort_type == 'Address':
+            self.sort_by_address()
+
+        elif sort_type == 'Id':
+            self.sort_by_id()
+
         else:
             self.contact = self.db.list_contact()
             for i in self.listbox.get_children():
@@ -140,7 +145,7 @@ class MainWindow(tk.Tk):
     def search_contact(self):
         self.contact_name = self.search_entry.get()
         self.result=self.db.search(self.contact_name)
-        print(self.result)
+       
         for i in self.listbox.get_children():
             self.listbox.delete(i)
 
@@ -163,7 +168,24 @@ class MainWindow(tk.Tk):
                 self.listbox.insert("","end", values=(c['id'],c['name'],c['gender'],
                                         c['email'],c['phone'],c['Type'],c['address']))
 
-       
+    def sort_by_address(self):
+        self.sort_address = self.db.sort_by_address()
+        for i in self.listbox.get_children():
+            self.listbox.delete(i)
+        for c in self.sort_address:
+                self.listbox.insert("","end", values=(c['id'],c['name'],c['gender'],
+                                        c['email'],c['phone'],c['Type'],c['address']))
+
+
+    def sort_by_id(self):
+        self.sort_id = self.db.sort_by_id()
+        for i in self.listbox.get_children():
+            self.listbox.delete(i)
+        for c in self.sort_id:
+                self.listbox.insert("","end", values=(c['id'],c['name'],c['gender'],
+                                        c['email'],c['phone'],c['Type'],c['address']))
+
+
         
 
         
