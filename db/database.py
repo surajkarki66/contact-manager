@@ -68,6 +68,13 @@ class DB:
         return contact
 
 
+    def sort_by_address(self):
+        self.cursor.execute('SELECT * FROM contact ORDER BY address')
+        self.connections.commit()
+        contact = [{'id': row[0], 'name': row[1], 'gender':row[2], 'email':row[3], 'phone': row[4], 'Type':row[5], 'address':row[6]} for row in self.cursor.fetchall()]
+        return contact
+
+
 
 
 
