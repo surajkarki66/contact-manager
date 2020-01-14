@@ -1,10 +1,11 @@
 import sqlite3
+from datetime import datetime
 
 class DB:
     def __init__(self):
         self.connections = sqlite3.connect('data.db')
         self.cursor = self.connections.cursor()
-        self.cursor.execute('CREATE TABLE IF NOT EXISTS contact(id INTEGER PRIMARY KEY, name TEXT, gender TEXT, phone INTEGER, Type TEXT , email TEXT, address TEXT)')
+        self.cursor.execute('CREATE TABLE IF NOT EXISTS contact(id INTEGER PRIMARY KEY, name TEXT, gender TEXT, phone INTEGER, Type TEXT , email TEXT, address TEXT,date DATETIME DEFAULT CURRENT_TIMESTAMP)')
         self.connections.commit()
 
     def __del__(self):
@@ -16,7 +17,7 @@ class DB:
         self.cursor.execute('SELECT COUNT(*) FROM contact')
         self.cursor.execute('SELECT * FROM contact')
         self.connections.commit()
-        contact = [{'id': row[0], 'name': row[1], 'gender':row[2], 'email':row[3], 'phone': row[4], 'Type':row[5], 'address':row[6]} for row in self.cursor.fetchall()]
+        contact = [{'id': row[0], 'name': row[1], 'gender':row[2], 'email':row[3], 'phone': row[4], 'Type':row[5], 'address':row[6], 'date':row[7]} for row in self.cursor.fetchall()]
         return contact
 
 
@@ -26,7 +27,7 @@ class DB:
     def insert(self, name, gender, phone, Type, email, address):
 
         try:
-            self.cursor.execute('INSERT INTO contact VALUES(NULL,?,?,?,?,?,?)',(name, gender, phone, Type,email, address))
+            self.cursor.execute('INSERT INTO contact VALUES(NULL,?,?,?,?,?,?,?)',(name, gender, phone, Type,email, address,datetime.now()))
             
 
         except sqlite3.IntegrityError:
@@ -41,9 +42,9 @@ class DB:
         
 
         try:
-
             self.connections.execute('update contact set name=?, gender=?,phone=?, Type=?, email=?,address=? where id=?',(name, gender, phone, Type, email, address, id))
             self.connections.commit()
+            
         except sqlite3.IntegrityError:
             print("The data is already")
         

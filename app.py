@@ -2,7 +2,6 @@ import tkinter as tk
 from tkinter import *
 import tkinter.messagebox as msgbox
 import tkinter.ttk as ttk
-import time
 import sqlite3
 
 

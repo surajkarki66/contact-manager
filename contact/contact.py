@@ -15,6 +15,7 @@ class Contact(tk.Toplevel):
         self.geometry("500x500")
         self.resizable(False,False)
         self.title('Add Contacts')
+
         label_0 =tk.Label(self, text='Add Contact Form', width=20, font=("bold", 20))
         label_0.place(x=90, y=43)
 
@@ -79,6 +80,7 @@ class Contact(tk.Toplevel):
         self.resizable(False,False)
         self.id = id
         self.title(f'Update Contact')
+
         label_0 =tk.Label(self, text='Update Contact', width=20, font=("bold", 20))
         label_0.place(x=90, y=43)
 
@@ -152,9 +154,6 @@ class Contact(tk.Toplevel):
             if name== "" or address == "" or phone == "" or gender == "":
                 msgbox.showerror("error", "All fields are required")
 
-            
-
-          
             else:
 
                 try:
@@ -165,10 +164,7 @@ class Contact(tk.Toplevel):
 
                 except ValueError:
                     msgbox.showerror("field", "Fields Error")
-                    msgbox.showinfo("info", f"{user_id} must me integer\n {phone} must be integer")
-
-
-            
+                    msgbox.showinfo("info", f"{user_id} must me integer\n {phone} must be integer")  
 
         else:
             pass
@@ -184,9 +180,6 @@ class Contact(tk.Toplevel):
         if msgbox.askyesno("Update Contact?", "Shall we proceed?"):
             if name== "" or address == "" or phone == "" or gender == "":
                 msgbox.showerror("error", "All fields are required")
-
-            
-
           
             else:
 
@@ -199,9 +192,6 @@ class Contact(tk.Toplevel):
                 except ValueError:
                     msgbox.showerror("field", "Fields Error")
                     msgbox.showinfo("info", f"{user_id} must me integer\n {phone} must be integer")
-
-
-            
 
         else:
             pass
