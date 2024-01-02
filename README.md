@@ -7,19 +7,23 @@ This is one of my portfolio projects.
 
 
 ## To run
-1. Create a python virtual environment
+1. Clone this repository
+   ```bash
+   git clone https://github.com/surajkarki66/contact-manager
+   ```
+2. Create a python virtual environment
    ```bash
    python -m venv venv
    ```
-2. Activate the virtual environment
+3. Activate the virtual environment
    ```bash
    source venv/bin/activate
    ```
-3. Install the requirements
+4. Install the requirements
    ```bash
    pip install -r "requirements.txt"
    ```
-4. Install the requirements
+5. Install the requirements
    ```bash
    python app.py
    ```
